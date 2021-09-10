@@ -1,19 +1,47 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Flex, Heading, Text, Button } from '@chakra-ui/react';
+import styled from '@emotion/styled';
+import web3 from 'web3';
+
+import { theme } from '../theme/index';
 
 import { AppContext } from '../context/AppContext';
 
 import FAQ from '../components/Faq';
 
+const StyledInput = styled.input`
+  width: 350px;
+  height: 50px;
+  outline: none;
+  color: white;
+  font-family: ${theme.fonts.spaceMono};
+  font-size: 1rem;
+  border-radius: 3px;
+  background-color: ${theme.colors.blackLighter};
+  margin-right: 1rem;
+  padding: 10px;
+  &::placeholder {
+    color: #ff3864;
+    opacity: 1;
+  }
+`;
+
 const Main = () => {
   const context = useContext(AppContext);
   const history = useHistory();
 
+  const [addressInput, setAddressInput] = useState('');
+
   const connectAndRedirect = async (context) => {
-    let account = await context.connectWallet();
-    if (account) {
+    if (web3.utils.isAddress(addressInput)) {
+      context.setTrackableAddress(addressInput);
       history.push('/dashboard');
+    } else {
+      let account = await context.connectWallet();
+      if (account) {
+        history.push('/dashboard');
+      }
     }
   };
 
@@ -29,12 +57,16 @@ const Main = () => {
         inns. Mint monsters and maps and dive right in.
       </Text>
       <Flex direction='row' mt='2rem'>
+        <StyledInput
+          placeholder='Enter address (OR)'
+          onChange={(e) => setAddressInput(e.target.value)}
+        ></StyledInput>
         <Button
           variant='primary'
           mr='1rem'
           onClick={() => connectAndRedirect(context)}
         >
-          Connect Account
+          {web3.utils.isAddress(addressInput) ? 'Track' : 'Connect'}
         </Button>
         <Button
           variant='secondary'
@@ -44,6 +76,7 @@ const Main = () => {
           Read FAQ
         </Button>
       </Flex>
+
       <FAQ />
     </Flex>
   );

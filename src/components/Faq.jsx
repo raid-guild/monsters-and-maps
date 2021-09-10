@@ -19,15 +19,6 @@ import { AppContext } from '../context/AppContext';
 
 const faq_items = [
   {
-    q: 'How do I mint Monsters or Monster Maps on Etherscan ?',
-    a:
-      'Go to the Hunt & Mint tab' +
-      "\nChoose 'Claim'(Monsters) or 'discoverEncounters’ (MonsterMaps)" +
-      '\nChoose a number between 1 - 9750 and try to claim!' +
-      '\n<li>Connect wallet' +
-      "\n'If the gas is ridiculously high(e.g. ~$15K), then that is claimed already.Try another number!"
-  },
-  {
     q: 'Why are there 2 Etherscan links?',
     a: 'There are 2 Etherscan links because there are 2 different NFTs you can mint. We have the Monsters - the creatures and beasts who roam the land. Next, we have the Monster Maps, which show you where each of these Monsters spawn on a Map.'
   },
@@ -76,13 +67,38 @@ const FAQ = () => {
     >
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>FAQs</ModalHeader>
-        <ModalBody>
+        <ModalHeader fontFamily='jetbrains'>FAQs</ModalHeader>
+        <ModalBody fontFamily='jetbrains'>
           <Accordion defaultIndex={[0]}>
+            <AccordionItem>
+              <AccordionButton color='red'>
+                <Box flex='1' textAlign='left'>
+                  How do I mint Monsters or Monster Maps on Etherscan ?
+                </Box>
+                <AccordionIcon />
+              </AccordionButton>
+              <AccordionPanel pb={4}>
+                <p>1. Go to the Hunt & Mint tab</p>
+                <br />
+                <p>
+                  2. Choose 'Claim'(Monsters) or 'discoverEncounters’
+                  (MonsterMaps)
+                </p>
+                <br />
+                <p>3. Choose a number between 1 - 9750 and try to claim!</p>
+                <br />
+                <p>4. Connect wallet</p>
+                <br />
+                <p>
+                  5. If the gas is ridiculously high(e.g. ~$15K), then that is
+                  claimed already.Try another number!
+                </p>
+              </AccordionPanel>
+            </AccordionItem>
             {faq_items.map((item, index) => {
               return (
                 <AccordionItem key={index}>
-                  <AccordionButton>
+                  <AccordionButton color='red'>
                     <Box flex='1' textAlign='left'>
                       {item.q}
                     </Box>
@@ -92,85 +108,6 @@ const FAQ = () => {
                 </AccordionItem>
               );
             })}
-            <AccordionItem>
-              <AccordionButton>
-                <Box flex='1' textAlign='left'>
-                  How do I get DAI?
-                </Box>
-                <AccordionIcon />
-              </AccordionButton>
-              <AccordionPanel pb={4}>
-                <p>
-                  DAI is a stablecoin pegged to the US Dollar. First, you'll
-                  need a wallet like{' '}
-                  <a
-                    href='https://metamask.io/'
-                    target='_blank'
-                    rel='noopener noreferrer'
-                  >
-                    Metamask
-                  </a>{' '}
-                  to manage your funds.
-                </p>
-                <br />
-                <p>
-                  Second, you'll need funds. To go from fiat currencies to the
-                  Ethereum ecosystem you can use a onramp like{' '}
-                  <a
-                    href='https://www.sendwyre.com/'
-                    target='_blank'
-                    rel='noopener noreferrer'
-                  >
-                    Wyre
-                  </a>{' '}
-                  or{' '}
-                  <a
-                    href='https://ramp.network/'
-                    target='_blank'
-                    rel='noopener noreferrer'
-                  >
-                    Ramp
-                  </a>
-                  .
-                </p>
-                <br />
-                <p>
-                  {' '}
-                  Lastly, you can use a decentralized exchange like{' '}
-                  <a
-                    href='https://app.uniswap.org/#/swap'
-                    target='_blank'
-                    rel='noopener noreferrer'
-                  >
-                    Uniswap
-                  </a>{' '}
-                  to swap your ETH for DAI.
-                </p>
-              </AccordionPanel>
-            </AccordionItem>
-
-            <AccordionItem>
-              <AccordionButton>
-                <Box flex='1' textAlign='left'>
-                  How can I get in touch with RaidGuild?
-                </Box>
-                <AccordionIcon />
-              </AccordionButton>
-              <AccordionPanel pb={4}>
-                <p>
-                  If you have questions about RaidGuild, the submission form or
-                  our consultation process, hop into our{' '}
-                  <a
-                    href='https://discord.gg/Sv5avwyNPX'
-                    target='_blank'
-                    rel='noopener noreferrer'
-                  >
-                    #client-arena
-                  </a>{' '}
-                  channel in Discord.
-                </p>
-              </AccordionPanel>
-            </AccordionItem>
           </Accordion>
         </ModalBody>
         <ModalFooter>

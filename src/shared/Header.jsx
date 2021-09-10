@@ -81,7 +81,7 @@ export const NavButton = ({ onClick, children }) => (
 );
 
 export const Header = () => {
-  const { account, chainID, disconnectWallet } = useContext(AppContext);
+  const { account, chainID, web3, disconnectWallet } = useContext(AppContext);
   const [isOpen, onOpen] = useState(false);
   const history = useHistory();
 
@@ -116,7 +116,7 @@ export const Header = () => {
         height='8rem'
         transition='width 1s ease-out'
       >
-        {account && (
+        {account && web3 && (
           <Flex justify='center' align='center' zIndex={5}>
             <Popover placement='left'>
               <PopoverTrigger>

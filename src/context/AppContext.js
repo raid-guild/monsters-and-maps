@@ -61,6 +61,10 @@ class AppContextProvider extends Component {
     this.setState({ faqModalStatus: status });
   };
 
+  setTrackableAddress = (address) => {
+    this.setState({ account: address });
+  };
+
   render() {
     return (
       <AppContext.Provider
@@ -68,7 +72,8 @@ class AppContextProvider extends Component {
           ...this.state,
           connectWallet: this.connectWallet,
           disconnectWallet: this.disconnectWallet,
-          updateFaqModalStatus: this.updateFaqModalStatus
+          updateFaqModalStatus: this.updateFaqModalStatus,
+          setTrackableAddress: this.setTrackableAddress
         }}
       >
         {this.props.children}

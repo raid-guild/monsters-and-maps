@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { gql, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import {
   Grid,
   Flex,
@@ -10,36 +10,18 @@ import {
   Spinner
 } from '@chakra-ui/react';
 
-import { useHistory, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+
+import Mapper from '../components/Mapper';
+import { getTokenImage } from '../utils/helpers';
+import { GET_MONSTER_INFO } from '../graphql/queries';
 
 import unclaimed_map from '../assets/map__unclaimed.png';
 
-const GET_MAPS = gql`
-  query GetMap($tokenId: String!) {
-    monsters(where: { tokenId: $tokenId }) {
-      tokenUri
-      mintInfo {
-        minter {
-          address
-        }
-        time
-      }
-      maps {
-        tokenId
-        tokenUri
-        owner {
-          address
-        }
-      }
-    }
-  }
-`;
-
 const Monster = () => {
   const { tokenId } = useParams();
-  const history = useHistory();
 
-  const { loading, error, data } = useQuery(GET_MAPS, {
+  const { loading, error, data } = useQuery(GET_MONSTER_INFO, {
     variables: { tokenId: tokenId.toString() }
   });
 
@@ -89,25 +71,16 @@ const Monster = () => {
               )}
               {maps.length !== 0 &&
                 maps.map((map, index) => {
-                  let result = '';
-                  if (map.tokenUri !== '') {
-                    let dataUri = map.tokenUri;
-                    let json = atob(dataUri.substring(29));
-                    result = JSON.parse(json);
-                  }
+                  let tokenImage = getTokenImage(map);
 
                   return (
-                    <Box
-                      key={index}
-                      onClick={() => history.push(`/monster/${map.tokenId}`)}
-                    >
-                      <Text variant='textOne'>#{map.tokenId}</Text>
-                      <Image
-                        src={result !== '' ? result.image : unclaimed_map}
-                        alt='map'
-                        w='150px'
-                      />
-                    </Box>
+                    <Mapper
+                      index={index}
+                      tokenId={map.tokenId}
+                      image={tokenImage !== '' ? tokenImage : unclaimed_map}
+                      route={tokenImage !== '' ? `/map/${map.tokenId}` : null}
+                      width='150px'
+                    />
                   );
                 })}
             </Grid>

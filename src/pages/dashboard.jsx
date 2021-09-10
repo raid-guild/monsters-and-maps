@@ -1,32 +1,15 @@
-import {
-  Grid,
-  Flex,
-  Heading,
-  Box,
-  Text,
-  Image,
-  Spinner
-} from '@chakra-ui/react';
+import { Grid, Flex, Heading, Text, Spinner } from '@chakra-ui/react';
 import { useContext, useEffect, useState } from 'react';
+
+import { useQuery } from '@apollo/client';
 import { useHistory } from 'react-router-dom';
-import { gql, useQuery } from '@apollo/client';
 
 import { AppContext } from '../context/AppContext';
 
-const GET_MAPS = gql`
-  query GetOwner($account: String!) {
-    owners(where: { address: $account }) {
-      maps {
-        tokenId
-        tokenUri
-      }
-      monsters {
-        tokenId
-        tokenUri
-      }
-    }
-  }
-`;
+import Mapper from '../components/Mapper';
+
+import { getTokenImage } from '../utils/helpers';
+import { GET_OWNER_INFO } from '../graphql/queries';
 
 const DashBoard = () => {
   const context = useContext(AppContext);
@@ -34,7 +17,7 @@ const DashBoard = () => {
   const [maps, setMaps] = useState([]);
   const [monsters, setMonsters] = useState([]);
 
-  const { loading, error, data } = useQuery(GET_MAPS, {
+  const { loading, error, data } = useQuery(GET_OWNER_INFO, {
     variables: { account: context.account }
   });
 
@@ -80,17 +63,13 @@ const DashBoard = () => {
               )}
               {maps &&
                 maps.map((map, index) => {
-                  let dataUri = map.tokenUri;
-                  let json = atob(dataUri.substring(29));
-                  let result = JSON.parse(json);
                   return (
-                    <Box
-                      key={index}
-                      onClick={() => history.push(`/map/${map.tokenId}`)}
-                    >
-                      <Text variant='textOne'>#{map.tokenId}</Text>
-                      <Image src={result.image} alt='map' w='300px' />
-                    </Box>
+                    <Mapper
+                      index={index}
+                      tokenId={map.tokenId}
+                      image={getTokenImage(map)}
+                      route={`/map/${map.tokenId}`}
+                    />
                   );
                 })}
             </Grid>
@@ -105,19 +84,13 @@ const DashBoard = () => {
               )}
               {maps &&
                 monsters.map((monster, index) => {
-                  let dataUri = monster.tokenUri;
-                  let json = atob(dataUri.substring(29));
-                  let result = JSON.parse(json);
                   return (
-                    <Box
-                      key={index}
-                      onClick={() =>
-                        history.push(`/monster/${monster.tokenId}`)
-                      }
-                    >
-                      <Text variant='textOne'>#{monster.tokenId}</Text>
-                      <Image src={result.image} alt='map' w='300px' />
-                    </Box>
+                    <Mapper
+                      index={index}
+                      tokenId={monster.tokenId}
+                      image={getTokenImage(monster)}
+                      route={`/monster/${monster.tokenId}`}
+                    />
                   );
                 })}
             </Grid>
