@@ -58,11 +58,12 @@ const World = () => {
   if (error) console.log(`Error! ${error.message}`);
 
   const mint = async () => {
+    console.log(context.chainID);
     if (context.ethersProvider === '') {
       setTxInitiated(true);
       await context.connectWallet();
       setTxInitiated(false);
-    } else if (context.chainID === '1' || context.chainID === '0x1') {
+    } else if (context.chainID === 1 || context.chainID === '0x1') {
       try {
         setTxInitiated(true);
         let tx = await mintMap(parseInt(tokenIdInput), context.ethersProvider);
