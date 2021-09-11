@@ -70,12 +70,21 @@ const Main = () => {
         </Button>
         <Button
           variant='secondary'
+          mr='1rem'
           onClick={() => context.updateFaqModalStatus(true)}
           id='faq-button'
         >
           Read FAQ
         </Button>
+        <Button
+          variant='secondary'
+          onClick={() => history.push('/world')}
+          id='world-map-button'
+        >
+          View World Map
+        </Button>
       </Flex>
+      
 
       <FAQ />
     </Flex>

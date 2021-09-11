@@ -1,5 +1,13 @@
 import { gql } from '@apollo/client';
 
+export const GET_ALL_MAPS = gql`
+  query GetAllMaps($first: Int!, $skip: Int!) {
+    maps(first: $first, skip: $skip) {
+      tokenId
+    }
+  }
+`;
+
 export const GET_MAP_INFO = gql`
   query GetMapInfo($tokenId: String!) {
     maps(where: { tokenId: $tokenId }) {

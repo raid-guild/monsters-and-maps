@@ -28,7 +28,7 @@ const Mapper = ({ index, tokenId, image, route }) => {
       setTxInitiated(true);
       await context.connectWallet();
       setTxInitiated(false);
-    } else if (context.chainID === '1' || context.chainID === '0x1') {
+    } else if (context.chainID === 1 || context.chainID === '0x1') {
       try {
         setTxInitiated(true);
         let mintFunc = location.pathname.includes('map')
