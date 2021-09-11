@@ -9,7 +9,6 @@ import {
   Image,
   Spinner
 } from '@chakra-ui/react';
-
 import { useParams } from 'react-router-dom';
 
 import Mapper from '../components/Mapper';
