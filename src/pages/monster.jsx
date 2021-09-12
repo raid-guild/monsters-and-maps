@@ -13,8 +13,9 @@ import {
 import { useParams } from 'react-router-dom';
 
 import Mapper from '../components/Mapper';
-import { getTokenImage } from '../utils/helpers';
+import { getTokenImage, getAccountString } from '../utils/helpers';
 import { GET_MONSTER_INFO } from '../graphql/queries';
+import { getProfile } from '../utils/3box';
 
 import unclaimed_map from '../assets/map__unclaimed.png';
 
@@ -27,18 +28,23 @@ const Monster = () => {
 
   const [maps, setMaps] = useState([]);
   const [monsterTokenUri, setMonsterTokenUri] = useState('');
+  const [owner, setOwner] = useState('');
 
   if (loading) console.log('Loading...');
   if (error) console.log(`Error! ${error.message}`);
 
   useEffect(() => {
     if (data) {
-      console.log(data);
-      let dataUri = data.monsters[0].tokenUri;
-      let json = atob(dataUri.substring(29));
-      let result = JSON.parse(json);
-      setMonsterTokenUri(result.image);
-      setMaps(data.monsters[0].maps);
+      getProfile(data.monsters[0].mintInfo.minter.address).then((p) => {
+        if (p && p.name) {
+          setOwner(p.name);
+        } else {
+          setOwner(getAccountString(data.monsters[0].mintInfo.minter.address));
+        }
+
+        setMonsterTokenUri(getTokenImage(data.monsters[0]));
+        setMaps(data.monsters[0].maps);
+      });
     }
   }, [data]);
 
@@ -54,10 +60,10 @@ const Monster = () => {
             <Image src={monsterTokenUri} alt='map' width='300px' />
             <br />
             <Text variant='textOne'>
-              minted at ${data.monsters[0].mintInfo.time}
+              minted at {data.monsters[0].mintInfo.time}
             </Text>
             <Text variant='textOne' maxW='300px' isTruncated>
-              minted by ${data.monsters[0].mintInfo.minter.address}
+              minted by {owner}
             </Text>
           </Box>
 
