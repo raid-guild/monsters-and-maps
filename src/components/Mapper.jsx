@@ -21,7 +21,31 @@ const Mapper = ({ index, tokenId, image, route }) => {
   const toast = useToast();
 
   const [txInitiated, setTxInitiated] = useState(false);
-  const [txHash, setTxHash] = useState('');
+
+  const getToast = (_txHash, _message) => {
+    return toast({
+      duration: 6000,
+      position: 'top',
+      render: () => (
+        <Box bg='black' fontFamily='jetbrains' color='red' mt='1rem' p='3'>
+          {_txHash !== '' ? (
+            <>
+              View your transaction{' '}
+              <Link
+                href={`https://etherscan.io/tx/${_txHash}`}
+                isExternal
+                textDecoration='underline'
+              >
+                here
+              </Link>
+            </>
+          ) : (
+            _message
+          )}
+        </Box>
+      )
+    });
+  };
 
   const mint = async () => {
     if (context.ethersProvider === '') {
@@ -36,49 +60,13 @@ const Mapper = ({ index, tokenId, image, route }) => {
           : mintMap;
         let tx = await mintFunc(tokenId, context.ethersProvider);
         if (tx) {
-          toast({
-            duration: 6000,
-            position: 'top',
-            render: () => (
-              <Box
-                bg='black'
-                fontFamily='jetbrains'
-                color='red'
-                mt='1rem'
-                p='3'
-              >
-                View your transaction{' '}
-                <Link
-                  href={`https://etherscan.io/tx/${txHash}`}
-                  isExternal
-                  textDecoration='underline'
-                >
-                  here
-                </Link>
-              </Box>
-            )
-          });
-          setTxHash(tx.hash);
+          getToast(tx.hash, '');
           const { status } = await tx.wait();
           if (status === 1) {
             setTxInitiated(false);
             history.push('/dashboard');
           } else {
-            toast({
-              duration: 6000,
-              position: 'top',
-              render: () => (
-                <Box
-                  bg='black'
-                  fontFamily='jetbrains'
-                  color='red'
-                  mt='1rem'
-                  p='3'
-                >
-                  Transaction failed!
-                </Box>
-              )
-            });
+            getToast('', 'Transaction failed!');
             setTxInitiated(false);
           }
         }
@@ -86,15 +74,7 @@ const Mapper = ({ index, tokenId, image, route }) => {
         setTxInitiated(false);
       }
     } else {
-      toast({
-        duration: 6000,
-        position: 'top',
-        render: () => (
-          <Box bg='black' fontFamily='jetbrains' color='red' mt='1rem' p='3'>
-            Switch to Mainnet
-          </Box>
-        )
-      });
+      getToast('', 'Switch to Mainnet');
     }
   };
 
