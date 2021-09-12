@@ -7,7 +7,12 @@ import {
   Text,
   Button,
   useToast,
-  Link
+  Link,
+  Tabs,
+  Tab,
+  TabList,
+  TabPanels,
+  TabPanel
 } from '@chakra-ui/react';
 import { useQuery } from '@apollo/client';
 import { useHistory } from 'react-router-dom';
@@ -215,25 +220,9 @@ const World = () => {
 
   return (
     <Flex direction='column' h='100%' w='100%' p='2rem'>
-      <Heading variant='headingOne'>The world map ..</Heading>
-      <Text variant='textOne' mt='1rem' mb='2rem'>
-        Below is a 100x100 grid with each of them representing a map where the
-        monsters hide and lurk in the dark. The red highlighted squares in the
-        grid represent a map token that has been explored by a hunter while the
-        dark squares are unexplored and who knows what hides in there.
-      </Text>
-      <canvas
-        id='grid'
-        style={{ background: theme.colors.blackLight }}
-      ></canvas>
-      <Heading variant='headingTwo' mt='5rem' mb='1rem'>
-        Explored Maps
+      <Heading variant='headingOne' mb='2rem'>
+        Map Minter
       </Heading>
-      <Text variant='textOne' mt='1rem' mb='1rem'>
-        Find below the map token IDs that are explored in the above world map.
-        Click to re-explore a map. Or enter a token ID that is not explored to
-        mint it.
-      </Text>
       <Flex direction='row' mb='2rem'>
         <StyledInput
           placeholder='Enter token ID'
@@ -254,27 +243,63 @@ const World = () => {
           {context.ethersProvider === '' ? 'Connect' : 'Claim'}
         </Button>
       </Flex>
-      {canvasDrawn && (
-        <SimpleGrid
-          columns={15}
-          gap={1}
-          style={{ backdropFilter: 'blur(.5rem)' }}
-        >
-          {grids.map((tokenId) => (
-            <Box
-              bg='blackLight'
-              color='red'
-              p={3}
-              fontFamily='jetbrains'
-              cursor='pointer'
-              _hover={{ bg: 'black' }}
-              onClick={() => history.push(`/map/${tokenId}`)}
-            >
-              #{tokenId}
-            </Box>
-          ))}
-        </SimpleGrid>
-      )}
+      <Tabs variant='line' isFitted>
+        <TabList fontFamily='rubik' fontWeight='bold'>
+          <Tab bg='black' color='red' _selected={{ bg: 'red', color: 'black' }}>
+            World Map
+          </Tab>
+          <Tab bg='black' color='red' _selected={{ bg: 'red', color: 'black' }}>
+            Claimed Maps
+          </Tab>
+        </TabList>
+        <TabPanels>
+          <TabPanel>
+            <Text variant='textOne' mt='1rem' mb='2rem' maxW='100%'>
+              Below is a 100x100 grid with each of them representing a map where
+              the monsters hide and lurk in the dark. The red highlighted
+              squares in the grid represent a map token that has been explored
+              by a hunter while the dark squares are unexplored and who knows
+              what hides in there.
+            </Text>
+            <canvas
+              id='grid'
+              style={{
+                background: theme.colors.blackLight,
+                width: '100%'
+              }}
+            ></canvas>
+          </TabPanel>
+          <TabPanel>
+            <Text variant='textOne' mt='1rem' mb='1rem' maxW='100%'>
+              Find below the map token IDs that are explored in the above world
+              map. Click to re-explore a map. Or enter a token ID that is not
+              explored to mint it.
+            </Text>
+
+            {canvasDrawn && (
+              <SimpleGrid
+                columns={15}
+                gap={1}
+                style={{ backdropFilter: 'blur(.5rem)' }}
+              >
+                {grids.map((tokenId) => (
+                  <Box
+                    bg='blackLight'
+                    color='red'
+                    p={3}
+                    fontFamily='jetbrains'
+                    cursor='pointer'
+                    _hover={{ bg: 'black' }}
+                    onClick={() => history.push(`/map/${tokenId}`)}
+                  >
+                    #{tokenId}
+                  </Box>
+                ))}
+              </SimpleGrid>
+            )}
+          </TabPanel>
+        </TabPanels>
+      </Tabs>
     </Flex>
   );
 };
