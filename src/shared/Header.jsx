@@ -18,6 +18,7 @@ import { AppContext } from '../context/AppContext';
 import { theme } from '../theme/index';
 
 import { getProfile } from '../utils/3box';
+import { getAccountString } from '../utils/helpers';
 
 // import Logo from '../assets/raidguild__logo.png';
 import LogoText from '../assets/m&m__logo.png';
@@ -32,13 +33,6 @@ const networkLabels = {
   56: 'BSC',
   77: 'Sokol',
   137: 'Matic'
-};
-
-const getAccountString = (account) => {
-  const len = account.length;
-  return `0x${account.substr(2, 3).toUpperCase()}...${account
-    .substr(len - 3, len - 1)
-    .toUpperCase()}`;
 };
 
 const getNetworkLabel = (chainId) =>
