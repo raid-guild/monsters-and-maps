@@ -18,25 +18,10 @@ import { AppContext } from '../context/AppContext';
 import { theme } from '../theme/index';
 
 import { getProfile } from '../utils/3box';
-import { getAccountString } from '../utils/helpers';
+import { getAccountString, getNetworkLabel } from '../utils/helpers';
 
 // import Logo from '../assets/raidguild__logo.png';
 import LogoText from '../assets/m&m__logo.png';
-
-const networkLabels = {
-  100: 'xDai',
-  1: 'Ethereum',
-  3: 'Ropsten',
-  4: 'Rinkeby',
-  5: 'Görli',
-  42: 'Kovan',
-  56: 'BSC',
-  77: 'Sokol',
-  137: 'Matic'
-};
-
-const getNetworkLabel = (chainId) =>
-  networkLabels[parseInt(chainId)] || 'unknown';
 
 const StyledButton = styled(Button)`
   &::after {

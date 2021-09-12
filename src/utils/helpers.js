@@ -1,3 +1,5 @@
+import { NETWORK_LABELS } from './constants';
+
 export const getTokenImage = (_token) => {
   if (_token.tokenUri === '') return '';
   let dataUri = _token.tokenUri;
@@ -12,3 +14,6 @@ export const getAccountString = (account) => {
     .substr(len - 3, len - 1)
     .toUpperCase()}`;
 };
+
+export const getNetworkLabel = (chainId) =>
+  NETWORK_LABELS[parseInt(chainId)] || 'unknown';

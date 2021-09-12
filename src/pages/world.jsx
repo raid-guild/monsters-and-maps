@@ -57,10 +57,34 @@ const World = () => {
   const [canvasDrawn, setCanvasDrawn] = useState(false);
   const [tokenIdInput, setTokenIdInput] = useState(10000);
   const [txInitiated, setTxInitiated] = useState(false);
-  const [txHash, setTxHash] = useState('');
 
   if (loading) console.log('Loading...');
   if (error) console.log(`Error! ${error.message}`);
+
+  const getToast = (_txHash, _message) => {
+    return toast({
+      duration: 6000,
+      position: 'top',
+      render: () => (
+        <Box bg='black' fontFamily='jetbrains' color='red' mt='1rem' p='3'>
+          {_txHash !== '' ? (
+            <>
+              View your transaction{' '}
+              <Link
+                href={`https://etherscan.io/tx/${_txHash}`}
+                isExternal
+                textDecoration='underline'
+              >
+                here
+              </Link>
+            </>
+          ) : (
+            _message
+          )}
+        </Box>
+      )
+    });
+  };
 
   const mint = async () => {
     console.log(context.chainID);
@@ -73,49 +97,13 @@ const World = () => {
         setTxInitiated(true);
         let tx = await mintMap(parseInt(tokenIdInput), context.ethersProvider);
         if (tx) {
-          toast({
-            duration: 6000,
-            position: 'top',
-            render: () => (
-              <Box
-                bg='black'
-                fontFamily='jetbrains'
-                color='red'
-                mt='1rem'
-                p='3'
-              >
-                View your transaction{' '}
-                <Link
-                  href={`https://etherscan.io/tx/${txHash}`}
-                  isExternal
-                  textDecoration='underline'
-                >
-                  here
-                </Link>
-              </Box>
-            )
-          });
-          setTxHash(tx.hash);
+          getToast(tx.hash, '');
           const { status } = await tx.wait();
           if (status === 1) {
             setTxInitiated(false);
             history.push('/dashboard');
           } else {
-            toast({
-              duration: 6000,
-              position: 'top',
-              render: () => (
-                <Box
-                  bg='black'
-                  fontFamily='jetbrains'
-                  color='red'
-                  mt='1rem'
-                  p='3'
-                >
-                  Transaction failed!
-                </Box>
-              )
-            });
+            getToast('', 'Transaction failed!');
             setTxInitiated(false);
           }
         }
@@ -123,15 +111,7 @@ const World = () => {
         setTxInitiated(false);
       }
     } else {
-      toast({
-        duration: 6000,
-        position: 'top',
-        render: () => (
-          <Box bg='black' fontFamily='jetbrains' color='red' mt='1rem' p='3'>
-            Switch to Mainnet
-          </Box>
-        )
-      });
+      getToast('', 'Switch to Mainnet');
     }
   };
 
