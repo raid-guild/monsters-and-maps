@@ -6,13 +6,16 @@ import {
   Heading,
   Text,
   Button,
-  useToast,
   Link,
   Tabs,
   Tab,
   TabList,
   TabPanels,
-  TabPanel
+  TabPanel,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalCloseButton
 } from '@chakra-ui/react';
 import { useQuery } from '@apollo/client';
 import { useHistory } from 'react-router-dom';
@@ -45,73 +48,54 @@ let grids = [];
 
 const World = () => {
   const context = useContext(AppContext);
-  const { loading, error, data, fetchMore } = useQuery(GET_ALL_MAPS, {
+  const { error, data, fetchMore } = useQuery(GET_ALL_MAPS, {
     variables: {
       first: 1000,
       skip: 0
     }
   });
   const history = useHistory();
-  const toast = useToast();
 
   const [canvasDrawn, setCanvasDrawn] = useState(false);
   const [tokenIdInput, setTokenIdInput] = useState(10000);
-  const [txInitiated, setTxInitiated] = useState(false);
 
-  if (loading) console.log('Loading...');
+  const [loading, setLoading] = useState(false);
+  const [txInitiated, setTxInitiated] = useState(false);
+  const [txHash, setTxhash] = useState('');
+  const [modal, setModal] = useState(false);
+
   if (error) console.log(`Error! ${error.message}`);
 
-  const getToast = (_txHash, _message) => {
-    return toast({
-      duration: 6000,
-      position: 'top',
-      render: () => (
-        <Box bg='black' fontFamily='jetbrains' color='red' mt='1rem' p='3'>
-          {_txHash !== '' ? (
-            <>
-              View your transaction{' '}
-              <Link
-                href={`https://etherscan.io/tx/${_txHash}`}
-                isExternal
-                textDecoration='underline'
-              >
-                here
-              </Link>
-            </>
-          ) : (
-            _message
-          )}
-        </Box>
-      )
-    });
+  const connect = async () => {
+    try {
+      setLoading(true);
+      if (context.ethersProvider === '') {
+        await context.connectWallet();
+      }
+      setModal(true);
+      setLoading(false);
+      setModal(true);
+    } catch (err) {
+      setLoading(false);
+    }
   };
 
   const mint = async () => {
-    console.log(context.chainID);
-    if (context.ethersProvider === '') {
+    try {
       setTxInitiated(true);
-      await context.connectWallet();
-      setTxInitiated(false);
-    } else if (context.chainID === 1 || context.chainID === '0x1') {
-      try {
-        setTxInitiated(true);
-        let tx = await mintMap(parseInt(tokenIdInput), context.ethersProvider);
-        if (tx) {
-          getToast(tx.hash, '');
-          const { status } = await tx.wait();
-          if (status === 1) {
-            setTxInitiated(false);
-            history.push('/dashboard');
-          } else {
-            getToast('', 'Transaction failed!');
-            setTxInitiated(false);
-          }
+      let tx = await mintMap(parseInt(tokenIdInput), context.ethersProvider);
+      if (tx) {
+        setTxhash(tx.hash);
+        const { status } = await tx.wait();
+        if (status === 1) {
+          setTxInitiated(false);
+          history.push('/dashboard');
+        } else {
+          setTxInitiated(false);
         }
-      } catch (err) {
-        setTxInitiated(false);
       }
-    } else {
-      getToast('', 'Switch to Mainnet');
+    } catch (err) {
+      setTxInitiated(false);
     }
   };
 
@@ -209,9 +193,9 @@ const World = () => {
           onChange={(e) => setTokenIdInput(e.target.value)}
         ></StyledInput>
         <Button
-          isLoading={txInitiated}
+          isLoading={loading}
           variant='primary'
-          onClick={() => mint()}
+          onClick={() => connect()}
           disabled={
             tokenIdInput &&
             parseInt(tokenIdInput) <= 9750 &&
@@ -220,7 +204,7 @@ const World = () => {
               : true
           }
         >
-          {context.ethersProvider === '' ? 'Connect' : 'Claim'}
+          Claim
         </Button>
       </Flex>
       <Tabs variant='line' isFitted>
@@ -280,6 +264,62 @@ const World = () => {
           </TabPanel>
         </TabPanels>
       </Tabs>
+
+      <Modal isOpen={modal} onClose={() => setModal(false)} isCentered>
+        <ModalOverlay>
+          <ModalContent
+            p='2rem'
+            maxW='40rem'
+            background='blackLight'
+            borderRadius='0.5rem'
+            color='white'
+            justifyContent='center'
+            alignItems='center'
+          >
+            <ModalCloseButton
+              _hover={{ bgColor: 'white20' }}
+              top='0.5rem'
+              right='0.5rem'
+            />
+            {context.chainID === 1 || context.chainID === '0x1' ? (
+              <>
+                <Text variant='textOne' mb='2rem' fontSize='lg'>
+                  Are you sure to mint token #{tokenIdInput}?
+                </Text>
+
+                <Button
+                  onClick={() => mint()}
+                  isDisabled={txInitiated}
+                  isLoading={txInitiated}
+                  textTransform='uppercase'
+                  variant='primary'
+                  w='50px'
+                >
+                  Mint
+                </Button>
+              </>
+            ) : (
+              <Text variant='textOne' color='red'>
+                Switch to Mainnet
+              </Text>
+            )}
+
+            {txHash && (
+              <Text color='white' textAlign='center' fontSize='sm'>
+                Follow your transaction{' '}
+                <Link
+                  href={`https://etherscan.io/tx/${txHash}`}
+                  isExternal
+                  color='red'
+                  textDecoration='underline'
+                >
+                  here
+                </Link>
+              </Text>
+            )}
+          </ModalContent>
+        </ModalOverlay>
+      </Modal>
     </Flex>
   );
 };
