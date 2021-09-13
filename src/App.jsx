@@ -11,6 +11,7 @@ import World from './pages/world';
 import DashBoard from './pages/dashboard';
 import Map from './pages/map';
 import Monster from './pages/monster';
+import FAQ from './components/Faq';
 
 import { ErrorBoundary } from './components/ErrorBoundary';
 
@@ -34,6 +35,7 @@ const App = () => {
               </Switch>
             </Layout>
           </Router>
+          <FAQ />
         </AppContextProvider>
       </ErrorBoundary>
     </ChakraProvider>

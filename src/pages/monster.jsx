@@ -49,7 +49,14 @@ const Monster = () => {
   }, [data]);
 
   return (
-    <Flex direction="column" alignItems="center" h="100%" w="100%" p="2rem">
+    <Flex
+      direction="column"
+      alignItems="center"
+      h="100%"
+      w="100%"
+      px="2rem"
+      my="5rem"
+    >
       {loading && <Spinner size="xl" />}
       {data && (
         <Grid templateColumns="repeat(2, 1fr)" gap={1}>

@@ -49,7 +49,7 @@ const DashBoard = () => {
   }, [context.account, history]);
 
   return (
-    <Flex direction="column" h="100%" w="100%" p="2rem">
+    <Flex direction="column" h="100%" w="100%" px="2rem" my="5rem">
       {loading && <Spinner size="xl" />}
       {!loading && (
         <>
