@@ -9,7 +9,7 @@ export const Footer = () => {
       w='100%'
       h='5rem'
       py='1rem'
-      px='3rem'
+			px={{sm: '1rem', md: '3rem', base: '1rem'}}
       direction='row'
       align='center'
       justify='space-between'
@@ -46,7 +46,7 @@ export const Footer = () => {
         </Link>
       </HStack>
 
-      <Link href='https://raidguild.org' isExternal zIndex={5}>
+      <Link href='https://raidguild.org' isExternal zIndex={5} ml=".5rem">
         <Image src={RaidGuild} alt='built-by-raid-guild' />
       </Link>
     </Flex>
