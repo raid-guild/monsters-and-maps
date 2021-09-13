@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import {
   Accordion,
   AccordionItem,
@@ -26,16 +26,16 @@ const FAQ = () => {
       onClose={() => context.updateFaqModalStatus(false)}
       isOpen={context.faqModalStatus}
       isCentered
-      scrollBehavior='inside'
+      scrollBehavior="inside"
     >
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader fontFamily='jetbrains'>FAQs</ModalHeader>
-        <ModalBody fontFamily='jetbrains'>
+        <ModalHeader fontFamily="jetbrains">FAQs</ModalHeader>
+        <ModalBody fontFamily="jetbrains">
           <Accordion defaultIndex={[0]}>
             <AccordionItem>
-              <AccordionButton color='red'>
-                <Box flex='1' textAlign='left'>
+              <AccordionButton color="red">
+                <Box flex="1" textAlign="left">
                   How do I mint Monsters or Monster Maps on Etherscan ?
                 </Box>
                 <AccordionIcon />
@@ -61,8 +61,8 @@ const FAQ = () => {
             {FAQ_ITEMS.map((item, index) => {
               return (
                 <AccordionItem key={index}>
-                  <AccordionButton color='red'>
-                    <Box flex='1' textAlign='left'>
+                  <AccordionButton color="red">
+                    <Box flex="1" textAlign="left">
                       {item.q}
                     </Box>
                     <AccordionIcon />

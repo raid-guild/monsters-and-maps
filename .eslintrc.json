@@ -1,0 +1,36 @@
+{
+  "env": {
+    "es6": true,
+    "browser": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:prettier/recommended",
+    "plugin:import/errors",
+    "plugin:import/warnings",
+    "plugin:react/recommended",
+    "plugin:react/jsx-runtime"
+  ],
+  "ecmaFeatures": {
+    "modules": true,
+    "jsx": true,
+    "experimentalObjectRestSpread": true
+  },
+  "parser": "babel-eslint",
+  "parserOptions": {
+    "sourceType": "module",
+    "allowImportExportEverywhere": true
+  },
+  "plugins": ["prettier", "import", "react"],
+  "rules": {
+    "react/prop-types": "off",
+    "react/no-unescaped-entities": "off",
+    "import/no-unresolved": "off",
+    "prettier/prettier": [
+      "error",
+      {
+        "endOfLine": "auto"
+      }
+    ]
+  }
+}

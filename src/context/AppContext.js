@@ -1,4 +1,4 @@
-import React, { Component, createContext } from 'react';
+import { Component, createContext } from 'react';
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import Web3Modal from 'web3modal';
 import Web3 from 'web3';
