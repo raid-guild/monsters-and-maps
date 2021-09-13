@@ -1,29 +1,28 @@
 import { Flex, Image, Link, HStack } from '@chakra-ui/react';
-import React from 'react';
 
 import RaidGuild from '../assets/built_by_raidguild.svg';
 
 export const Footer = () => {
   return (
     <Flex
-      w='100%'
-      h='5rem'
-      py='1rem'
-			px={{sm: '1rem', md: '3rem', base: '1rem'}}
-      direction='row'
-      align='center'
-      justify='space-between'
+      w="100%"
+      h="5rem"
+      py="1rem"
+      px={{ sm: '1rem', md: '3rem', base: '1rem' }}
+      direction="row"
+      align="center"
+      justify="space-between"
     >
-      <HStack fontFamily='jetbrains'>
-        <Link mr='10px'>
+      <HStack fontFamily="jetbrains">
+        <Link mr="10px">
           <HStack>
             <span style={{ width: '15px', marginRight: '1px' }}>
-              <i className='fab fa-twitter'></i>
+              <i className="fab fa-twitter"></i>
             </span>
             <Link
-              href='https://twitter.com/Monstermap'
-              target='_blank'
-              rel='noopener noreferrer'
+              href="https://twitter.com/Monstermap"
+              target="_blank"
+              rel="noopener noreferrer"
             >
               Twitter
             </Link>
@@ -33,12 +32,12 @@ export const Footer = () => {
         <Link>
           <HStack>
             <span style={{ width: '15px', marginRight: '1px' }}>
-              <i className='fab fa-discord'></i>
+              <i className="fab fa-discord"></i>
             </span>
             <Link
-              href='https://discord.gg/rqwMK42r'
-              target='_blank'
-              rel='noopener noreferrer'
+              href="https://discord.gg/rqwMK42r"
+              target="_blank"
+              rel="noopener noreferrer"
             >
               Discord
             </Link>
@@ -46,8 +45,8 @@ export const Footer = () => {
         </Link>
       </HStack>
 
-      <Link href='https://raidguild.org' isExternal zIndex={5} ml=".5rem">
-        <Image src={RaidGuild} alt='built-by-raid-guild' />
+      <Link href="https://raidguild.org" isExternal zIndex={5} ml=".5rem">
+        <Image src={RaidGuild} alt="built-by-raid-guild" />
       </Link>
     </Flex>
   );

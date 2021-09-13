@@ -124,7 +124,6 @@ const World = () => {
         setCanvasDrawn(true);
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
   const drawGrid = (_grids) => {
@@ -183,18 +182,18 @@ const World = () => {
   };
 
   return (
-    <Flex direction='column' h='100%' w='100%' p='2rem'>
-      <Heading variant='headingOne' mb='2rem'>
+    <Flex direction="column" h="100%" w="100%" p="2rem">
+      <Heading variant="headingOne" mb="2rem">
         Map Minter
       </Heading>
-      <Flex direction='row' mb='2rem'>
+      <Flex direction="row" mb="2rem">
         <StyledInput
-          placeholder='Enter token ID'
+          placeholder="Enter token ID"
           onChange={(e) => setTokenIdInput(e.target.value)}
         ></StyledInput>
         <Button
           isLoading={loading}
-          variant='primary'
+          variant="primary"
           onClick={() => connect()}
           disabled={
             tokenIdInput &&
@@ -207,18 +206,18 @@ const World = () => {
           Claim
         </Button>
       </Flex>
-      <Tabs variant='line' isFitted>
-        <TabList fontFamily='rubik' fontWeight='bold'>
-          <Tab bg='black' color='red' _selected={{ bg: 'red', color: 'black' }}>
+      <Tabs variant="line" isFitted>
+        <TabList fontFamily="rubik" fontWeight="bold">
+          <Tab bg="black" color="red" _selected={{ bg: 'red', color: 'black' }}>
             World Map
           </Tab>
-          <Tab bg='black' color='red' _selected={{ bg: 'red', color: 'black' }}>
+          <Tab bg="black" color="red" _selected={{ bg: 'red', color: 'black' }}>
             Claimed Maps
           </Tab>
         </TabList>
         <TabPanels>
           <TabPanel>
-            <Text variant='textOne' mt='1rem' mb='2rem' maxW='100%'>
+            <Text variant="textOne" mt="1rem" mb="2rem" maxW="100%">
               Below is a 100x100 grid with each of them representing a map where
               the monsters hide and lurk in the dark. The red highlighted
               squares in the grid represent a map token that has been explored
@@ -226,7 +225,7 @@ const World = () => {
               what hides in there.
             </Text>
             <canvas
-              id='grid'
+              id="grid"
               style={{
                 background: theme.colors.blackLight,
                 width: '100%'
@@ -234,7 +233,7 @@ const World = () => {
             ></canvas>
           </TabPanel>
           <TabPanel>
-            <Text variant='textOne' mt='1rem' mb='1rem' maxW='100%'>
+            <Text variant="textOne" mt="1rem" mb="1rem" maxW="100%">
               Find below the map token IDs that are explored in the above world
               map. Click to re-explore a map. Or enter a token ID that is not
               explored to mint it.
@@ -248,11 +247,12 @@ const World = () => {
               >
                 {grids.map((tokenId) => (
                   <Box
-                    bg='blackLight'
-                    color='red'
+                    key={tokenId}
+                    bg="blackLight"
+                    color="red"
                     p={3}
-                    fontFamily='jetbrains'
-                    cursor='pointer'
+                    fontFamily="jetbrains"
+                    cursor="pointer"
                     _hover={{ bg: 'black' }}
                     onClick={() => history.push(`/map/${tokenId}`)}
                   >
@@ -268,22 +268,22 @@ const World = () => {
       <Modal isOpen={modal} onClose={() => setModal(false)} isCentered>
         <ModalOverlay>
           <ModalContent
-            p='2rem'
-            maxW='40rem'
-            background='blackLight'
-            borderRadius='0.5rem'
-            color='white'
-            justifyContent='center'
-            alignItems='center'
+            p="2rem"
+            maxW="40rem"
+            background="blackLight"
+            borderRadius="0.5rem"
+            color="white"
+            justifyContent="center"
+            alignItems="center"
           >
             <ModalCloseButton
               _hover={{ bgColor: 'white20' }}
-              top='0.5rem'
-              right='0.5rem'
+              top="0.5rem"
+              right="0.5rem"
             />
             {context.chainID === 1 || context.chainID === '0x1' ? (
               <>
-                <Text variant='textOne' mb='2rem' fontSize='lg'>
+                <Text variant="textOne" mb="2rem" fontSize="lg">
                   Are you sure to mint token #{tokenIdInput}?
                 </Text>
 
@@ -291,27 +291,27 @@ const World = () => {
                   onClick={() => mint()}
                   isDisabled={txInitiated}
                   isLoading={txInitiated}
-                  textTransform='uppercase'
-                  variant='primary'
-                  w='50px'
+                  textTransform="uppercase"
+                  variant="primary"
+                  w="50px"
                 >
                   Mint
                 </Button>
               </>
             ) : (
-              <Text variant='textOne' color='red'>
+              <Text variant="textOne" color="red">
                 Switch to Mainnet
               </Text>
             )}
 
             {txHash && (
-              <Text color='white' textAlign='center' fontSize='sm'>
+              <Text color="white" textAlign="center" fontSize="sm">
                 Follow your transaction{' '}
                 <Link
                   href={`https://etherscan.io/tx/${txHash}`}
                   isExternal
-                  color='red'
-                  textDecoration='underline'
+                  color="red"
+                  textDecoration="underline"
                 >
                   here
                 </Link>

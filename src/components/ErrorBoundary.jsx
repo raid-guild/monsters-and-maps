@@ -24,16 +24,16 @@ export class ErrorBoundary extends Component {
     if (hasError) {
       return (
         <Flex
-          justify='center'
-          align='center'
-          direction='column'
-          w='100%'
-          minH='100vh'
-          background='black'
-          color='red'
+          justify="center"
+          align="center"
+          direction="column"
+          w="100%"
+          minH="100vh"
+          background="black"
+          color="red"
         >
-          <Heading variant='headingOne'> Something went wrong!</Heading>
-          <Text variant='textOne'> Please check console for errors</Text>
+          <Heading variant="headingOne"> Something went wrong!</Heading>
+          <Text variant="textOne"> Please check console for errors</Text>
         </Flex>
       );
     }

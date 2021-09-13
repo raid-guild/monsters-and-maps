@@ -12,7 +12,7 @@ import FAQ from '../components/Faq';
 
 const StyledInput = styled.input`
   max-width: 350px;
-	width: 100%;
+  width: 100%;
   height: 50px;
   outline: none;
   color: white;
@@ -29,7 +29,7 @@ const StyledInput = styled.input`
 
 const StyledFlex = styled(Flex)`
   gap: 1rem;
-`
+`;
 
 const Main = () => {
   const context = useContext(AppContext);
@@ -50,38 +50,35 @@ const Main = () => {
   };
 
   return (
-    <Flex direction='column'>
-      <Heading variant='headingOne' p='1rem'>
+    <Flex direction="column">
+      <Heading variant="headingOne" p="1rem">
         I see your interest is piqued, curious traveller..
       </Heading>
-      <Text variant='textOne' p='1rem'>
+      <Text variant="textOne" p="1rem">
         Ever since monsters and maps started appearing across the horizon, there
         have been murmurs in the crowd - what's the meaning behind all these?
         Well, We've overheard some rumours, stories and quests, in taverns and
         inns. Mint monsters and maps and dive right in.
       </Text>
-			<StyledFlex direction='row' p='1rem' flexWrap="wrap">
+      <StyledFlex direction="row" p="1rem" flexWrap="wrap">
         <StyledInput
-          placeholder='Enter address (OR)'
+          placeholder="Enter address (OR)"
           onChange={(e) => setAddressInput(e.target.value)}
         ></StyledInput>
-        <Button
-          variant='primary'
-          onClick={() => connectAndRedirect(context)}
-        >
+        <Button variant="primary" onClick={() => connectAndRedirect(context)}>
           {web3.utils.isAddress(addressInput) ? 'Track' : 'Connect'}
         </Button>
         <Button
-          variant='secondary'
+          variant="secondary"
           onClick={() => context.updateFaqModalStatus(true)}
-          id='faq-button'
+          id="faq-button"
         >
           Read FAQ
         </Button>
         <Button
-          variant='secondary'
+          variant="secondary"
           onClick={() => history.push('/world')}
-          id='world-map-button'
+          id="world-map-button"
         >
           View World Map
         </Button>
