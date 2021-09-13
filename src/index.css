@@ -18,3 +18,17 @@ input[type='date']::-webkit-calendar-picker-indicator {
 *:focus {
   box-shadow: none !important;
 }
+
+::-webkit-scrollbar {
+  width: 10px;
+  background: #16161a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #ff3864;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #e4728b;
+}

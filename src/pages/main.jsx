@@ -8,8 +8,6 @@ import { theme } from '../theme/index';
 
 import { AppContext } from '../context/AppContext';
 
-import FAQ from '../components/Faq';
-
 const StyledInput = styled.input`
   max-width: 350px;
   width: 100%;
@@ -50,7 +48,7 @@ const Main = () => {
   };
 
   return (
-    <Flex direction="column">
+    <Flex direction="column" my="5rem">
       <Heading variant="headingOne" p="1rem">
         I see your interest is piqued, curious traveller..
       </Heading>
@@ -68,22 +66,7 @@ const Main = () => {
         <Button variant="primary" onClick={() => connectAndRedirect(context)}>
           {web3.utils.isAddress(addressInput) ? 'Track' : 'Connect'}
         </Button>
-        <Button
-          variant="secondary"
-          onClick={() => context.updateFaqModalStatus(true)}
-          id="faq-button"
-        >
-          Read FAQ
-        </Button>
-        <Button
-          variant="secondary"
-          onClick={() => history.push('/world')}
-          id="world-map-button"
-        >
-          View World Map
-        </Button>
       </StyledFlex>
-      <FAQ />
     </Flex>
   );
 };
