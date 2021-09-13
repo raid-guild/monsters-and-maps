@@ -156,14 +156,22 @@ export const Header = () => {
                   </Tag>
                 </Button>
               </PopoverTrigger>
-              <PopoverContent bg="none" w="auto">
+              <PopoverContent bg="none" w="auto" border="none">
+                <Button
+                  onClick={() => {
+                    history.push('/dashboard');
+                  }}
+                  variant="primary"
+                >
+                  Dashboard
+                </Button>
                 <Button
                   onClick={() => {
                     disconnectWallet();
                     history.push('/');
                   }}
-                  variant="primary"
-                  mt="0"
+                  variant="secondary"
+                  mt=".5rem"
                 >
                   Disconnect
                 </Button>
