@@ -182,7 +182,7 @@ const World = () => {
   };
 
   return (
-    <Flex direction="column" h="100%" w="100%" p="2rem">
+    <Flex direction="column" h="100%" w="100%" px="2rem" my="5rem">
       <Heading variant="headingOne" mb="2rem">
         Map Minter
       </Heading>

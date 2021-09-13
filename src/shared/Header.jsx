@@ -1,7 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import { Link as RouterLink, useHistory } from 'react-router-dom';
 import {
-  Box,
   Button,
   Flex,
   Image,
@@ -60,7 +59,8 @@ export const NavButton = ({ onClick, children }) => (
 );
 
 export const Header = () => {
-  const { account, chainID, web3, disconnectWallet } = useContext(AppContext);
+  const { account, chainID, web3, disconnectWallet, updateFaqModalStatus } =
+    useContext(AppContext);
   const [isOpen, onOpen] = useState(false);
   const history = useHistory();
 
@@ -81,14 +81,30 @@ export const Header = () => {
       align="center"
       zIndex={5}
     >
-      <Box zIndex={5}>
+      <Flex align="center" p="1rem" m="1rem" w="100%">
         <RouterLink to="/">
-          <Flex align="center" p="1rem" m="1rem">
-            {/* <Image src={Logo} alt='Raid Guild' width='50px' /> */}
-            <Image src={LogoText} alt="Smart Invoice" width="200px" />
-          </Flex>
+          <Image src={LogoText} alt="Smart Invoice" width="200px" />
         </RouterLink>
-      </Box>
+        <Flex ml="auto">
+          <Button
+            variant="secondary"
+            onClick={() => history.push('/world')}
+            id="world-map-button"
+          >
+            View World Map
+          </Button>
+
+          <Button
+            variant="secondary"
+            onClick={() => updateFaqModalStatus(true)}
+            id="faq-button"
+            ml="2rem"
+          >
+            Read FAQ
+          </Button>
+        </Flex>
+      </Flex>
+
       <Flex
         mx={{ base: '2rem', sm: '3rem' }}
         align="center"
@@ -97,7 +113,7 @@ export const Header = () => {
       >
         {account && web3 && (
           <Flex justify="center" align="center" zIndex={5}>
-            <Popover placement="left">
+            <Popover placement="bottom">
               <PopoverTrigger>
                 <Button
                   h="auto"
@@ -155,35 +171,37 @@ export const Header = () => {
             </Popover>
           </Flex>
         )}
-        <Button
-          onClick={() => onOpen((o) => !o)}
-          variant="link"
-          ml={{ base: '0.5rem', sm: '1rem' }}
-          zIndex={7}
-        >
-          {!isOpen && (
-            <span
-              style={{
-                width: '50px',
-                fontSize: '2rem',
-                color: theme.colors.red
-              }}
-            >
-              <i className="fas fa-bars" />
-            </span>
-          )}
-          {isOpen && (
-            <span
-              style={{
-                width: '50px',
-                fontSize: '2rem',
-                color: theme.colors.red
-              }}
-            >
-              <i className="fas fa-times" />
-            </span>
-          )}
-        </Button>
+        {window.innerWidth < 500 && (
+          <Button
+            onClick={() => onOpen((o) => !o)}
+            variant="link"
+            ml={{ base: '0.5rem', sm: '1rem' }}
+            zIndex={7}
+          >
+            {!isOpen && (
+              <span
+                style={{
+                  width: '50px',
+                  fontSize: '2rem',
+                  color: theme.colors.red
+                }}
+              >
+                <i className="fas fa-bars" />
+              </span>
+            )}
+            {isOpen && (
+              <span
+                style={{
+                  width: '50px',
+                  fontSize: '2rem',
+                  color: theme.colors.red
+                }}
+              >
+                <i className="fas fa-times" />
+              </span>
+            )}
+          </Button>
+        )}
       </Flex>
       <Flex
         zIndex={6}
