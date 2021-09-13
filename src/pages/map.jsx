@@ -48,34 +48,35 @@ const Map = () => {
   }, [data]);
 
   return (
-    <Flex direction='column' alignItems='center' h='100%' w='100%' p='2rem'>
-      {loading && <Spinner size='xl' />}
+    <Flex direction="column" alignItems="center" h="100%" w="100%" p="2rem">
+      {loading && <Spinner size="xl" />}
       {data && (
-        <Grid templateColumns='repeat(2, 1fr)' gap={1}>
+        <Grid templateColumns="repeat(2, 1fr)" gap={1}>
           <Box>
-            <Heading variant='headingTwo' mb='1rem'>
+            <Heading variant="headingTwo" mb="1rem">
               Map #${tokenId}
             </Heading>
-            <Image src={mapTokenUri} alt='map' width='300px' />
+            <Image src={mapTokenUri} alt="map" width="300px" />
             <br />
-            <Text variant='textOne'>
+            <Text variant="textOne">
               minted at {data.maps[0].mintInfo.time}
             </Text>
-            <Text variant='textOne' maxW='300px' isTruncated>
+            <Text variant="textOne" maxW="300px" isTruncated>
               minted by {owner}
             </Text>
           </Box>
 
           <Box>
-            <Heading variant='headingTwo' mb='1rem'>
+            <Heading variant="headingTwo" mb="1rem">
               Monsters Found
             </Heading>
-            <Grid templateColumns='repeat(4, 1fr)' gap={6}>
+            <Grid templateColumns="repeat(4, 1fr)" gap={6}>
               {monsters.map((monster, index) => {
                 let tokenImage = getTokenImage(monster);
 
                 return (
                   <Mapper
+                    key={index}
                     index={index}
                     tokenId={monster.tokenId}
                     image={tokenImage !== '' ? tokenImage : unclaimed_monster}

@@ -7,6 +7,7 @@ import { Text } from './elements/Text';
 
 const breakpoints = createBreakpoints({
   base: '320px',
+  sm: '420px',
   md: '580px',
   lg: '1026px'
 });

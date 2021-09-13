@@ -70,22 +70,22 @@ const Mapper = ({ index, tokenId, image, route }) => {
             if (route !== null) history.push(route);
           }}
           cursor={route !== null ? 'pointer' : 'no-drop'}
-          position='relative'
+          position="relative"
         >
-          <Text variant='textOne'>#{tokenId}</Text>
-          <Image src={image} alt='map' w='300px' />
+          <Text variant="textOne">#{tokenId}</Text>
+          <Image src={image} alt="map" w="300px" />
           {route === null && (
             <Button
               isLoading={loading}
-              position='absolute'
-              top='60%'
-              left='50%'
-              transform='translateY(-50%) translateX(-50%)'
-              bg='greyLight'
-              color='black'
-              fontFamily='jetbrains'
-              textTransform='uppercase'
-              borderRadius='0px'
+              position="absolute"
+              top="60%"
+              left="50%"
+              transform="translateY(-50%) translateX(-50%)"
+              bg="greyLight"
+              color="black"
+              fontFamily="jetbrains"
+              textTransform="uppercase"
+              borderRadius="0px"
               _hover={{ bg: 'greyDark' }}
               onClick={() => connect()}
             >
@@ -97,22 +97,22 @@ const Mapper = ({ index, tokenId, image, route }) => {
       <Modal isOpen={modal} onClose={() => setModal(false)} isCentered>
         <ModalOverlay>
           <ModalContent
-            p='2rem'
-            maxW='40rem'
-            background='blackLight'
-            borderRadius='0.5rem'
-            color='white'
-            justifyContent='center'
-            alignItems='center'
+            p="2rem"
+            maxW="40rem"
+            background="blackLight"
+            borderRadius="0.5rem"
+            color="white"
+            justifyContent="center"
+            alignItems="center"
           >
             <ModalCloseButton
               _hover={{ bgColor: 'white20' }}
-              top='0.5rem'
-              right='0.5rem'
+              top="0.5rem"
+              right="0.5rem"
             />
             {context.chainID === 1 || context.chainID === '0x1' ? (
               <>
-                <Text variant='textOne' mb='2rem' fontSize='lg'>
+                <Text variant="textOne" mb="2rem" fontSize="lg">
                   Are you sure to mint token #{tokenId}?
                 </Text>
 
@@ -120,27 +120,27 @@ const Mapper = ({ index, tokenId, image, route }) => {
                   onClick={() => mint()}
                   isDisabled={txInitiated}
                   isLoading={txInitiated}
-                  textTransform='uppercase'
-                  variant='primary'
-                  w='50px'
+                  textTransform="uppercase"
+                  variant="primary"
+                  w="50px"
                 >
                   Mint
                 </Button>
               </>
             ) : (
-              <Text variant='textOne' color='red'>
+              <Text variant="textOne" color="red">
                 Switch to Mainnet
               </Text>
             )}
 
             {txHash && (
-              <Text color='white' textAlign='center' fontSize='sm'>
+              <Text color="white" textAlign="center" fontSize="sm">
                 Follow your transaction{' '}
                 <Link
                   href={`https://etherscan.io/tx/${txHash}`}
                   isExternal
-                  color='red'
-                  textDecoration='underline'
+                  color="red"
+                  textDecoration="underline"
                 >
                   here
                 </Link>

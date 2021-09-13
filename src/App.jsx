@@ -7,7 +7,7 @@ import { theme } from './theme/index';
 import { Layout } from './shared/Layout';
 
 import Main from './pages/main';
-import World from './pages/world'
+import World from './pages/world';
 import DashBoard from './pages/dashboard';
 import Map from './pages/map';
 import Monster from './pages/monster';
@@ -22,12 +22,12 @@ const App = () => {
           <Router>
             <Layout>
               <Switch>
-                <Route path='/' exact component={Main}></Route>
-                <Route path='/world' exact component={World}></Route>
-                <Route path='/dashboard' exact component={DashBoard}></Route>
-                <Route path='/map/:tokenId' exact component={Map}></Route>
+                <Route path="/" exact component={Main}></Route>
+                <Route path="/world" exact component={World}></Route>
+                <Route path="/dashboard" exact component={DashBoard}></Route>
+                <Route path="/map/:tokenId" exact component={Map}></Route>
                 <Route
-                  path='/monster/:tokenId'
+                  path="/monster/:tokenId"
                   exact
                   component={Monster}
                 ></Route>
