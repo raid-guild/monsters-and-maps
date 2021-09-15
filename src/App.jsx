@@ -1,4 +1,5 @@
-import { ChakraProvider } from '@chakra-ui/react';
+import { useState, useEffect } from 'react';
+import { ChakraProvider, Flex } from '@chakra-ui/react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import AppContextProvider from './context/AppContext';
@@ -16,7 +17,29 @@ import FAQ from './components/Faq';
 import { ErrorBoundary } from './components/ErrorBoundary';
 
 const App = () => {
-  return (
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    window.addEventListener('resize', () => {
+      setWindowWidth(window.innerWidth);
+    });
+  }, []);
+
+  return windowWidth < 850 ? (
+    <Flex
+      w="100vw"
+      h="100vh"
+      alignItems="center"
+      justifyContent="center"
+      bg="black"
+      color="#ff3864"
+      fontSize="2rem"
+      p="2rem"
+      textAlign="center"
+    >
+      Monster Maps is good on a big screen!
+    </Flex>
+  ) : (
     <ChakraProvider theme={theme}>
       <ErrorBoundary>
         <AppContextProvider>

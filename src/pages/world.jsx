@@ -52,7 +52,8 @@ const World = () => {
     variables: {
       first: 1000,
       skip: 0
-    }
+    },
+    notifyOnNetworkStatusChange: true
   });
   const history = useHistory();
 
@@ -106,6 +107,7 @@ const World = () => {
   useEffect(() => {
     if (data) {
       let _temp = grids;
+
       data.maps.forEach((map) => {
         _temp.push(parseInt(map.tokenId));
       });
@@ -114,6 +116,13 @@ const World = () => {
         fetchMore({
           variables: {
             skip: data.maps.length
+          },
+          updateQuery: (prev, { fetchMoreResult }) => {
+            if (!fetchMoreResult) return prev;
+            console.log(fetchMoreResult);
+            return Object.assign({}, prev, {
+              maps: [...prev.maps, ...fetchMoreResult.maps]
+            });
           }
         });
       } else {
