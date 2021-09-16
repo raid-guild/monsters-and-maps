@@ -48,7 +48,7 @@ const Main = () => {
   };
 
   return (
-    <Flex direction="column" my="5rem">
+    <Flex direction="column" my="5rem" mx="2rem">
       <Heading variant="headingOne" p="1rem">
         I see your interest is piqued, curious traveller..
       </Heading>
