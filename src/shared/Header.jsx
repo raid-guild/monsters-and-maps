@@ -61,10 +61,18 @@ export const NavButton = ({ onClick, children }) => (
 export const Header = () => {
   const { account, chainID, web3, disconnectWallet, updateFaqModalStatus } =
     useContext(AppContext);
-  const [isOpen, onOpen] = useState(false);
+  // const [isOpen, onOpen] = useState(false);
   const history = useHistory();
 
   const [profile, setProfile] = useState();
+
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    window.addEventListener('resize', () => {
+      setWindowWidth(window.innerWidth);
+    });
+  }, []);
 
   useEffect(() => {
     if (account) {
@@ -82,37 +90,62 @@ export const Header = () => {
       zIndex={5}
       bg="black"
     >
-      <Flex align="center" p="1rem" m="1rem" w="100%">
+      <Flex align="center" justifyContent="space-between" m="1rem" w="100%">
         <RouterLink to="/">
-          <Image src={LogoText} alt="Smart Invoice" width="200px" />
+          <Image
+            src={LogoText}
+            alt="M&Ms"
+            width={{ md: '200px', base: '125px' }}
+          />
         </RouterLink>
-        <Flex ml="auto">
-          <Button
-            variant="secondary"
-            onClick={() => history.push('/world')}
-            id="world-map-button"
-          >
-            View World Map
-          </Button>
+        {windowWidth > 750 && (
+          <Flex ml="auto">
+            <Button
+              variant="secondary"
+              onClick={() => history.push('/world')}
+              id="world-map-button"
+            >
+              View World Map
+            </Button>
 
-          <Button
-            variant="secondary"
-            onClick={() => updateFaqModalStatus(true)}
-            id="faq-button"
-            ml="2rem"
-          >
-            Read FAQ
-          </Button>
-        </Flex>
+            <Button
+              variant="secondary"
+              onClick={() => updateFaqModalStatus(true)}
+              id="faq-button"
+              ml="2rem"
+            >
+              Read FAQ
+            </Button>
+          </Flex>
+        )}
+        {windowWidth < 750 && (
+          <Flex>
+            <ChakraLink onClick={() => history.push('/world')} mr="3rem">
+              <span
+                style={{ width: '100px', marginRight: '5px', fontSize: '20px' }}
+              >
+                <i className="fas fa-map"></i>
+              </span>
+            </ChakraLink>
+
+            <ChakraLink onClick={() => updateFaqModalStatus(true)}>
+              <span
+                style={{ width: '100px', marginRight: '5px', fontSize: '20px' }}
+              >
+                <i className="fas fa-info-circle"></i>
+              </span>
+            </ChakraLink>
+          </Flex>
+        )}
       </Flex>
 
-      <Flex
-        mx={{ base: '2rem', sm: '3rem' }}
-        align="center"
-        height="8rem"
-        transition="width 1s ease-out"
-      >
-        {account && web3 && (
+      {account && web3 && (
+        <Flex
+          mx={{ base: '1rem', sm: '3rem' }}
+          align="center"
+          height="8rem"
+          transition="width 1s ease-out"
+        >
           <Flex justify="center" align="center" zIndex={5}>
             <Popover placement="bottom">
               <PopoverTrigger>
@@ -179,8 +212,8 @@ export const Header = () => {
               </PopoverContent>
             </Popover>
           </Flex>
-        )}
-        {window.innerWidth < 500 && (
+
+          {/* {window.innerWidth < 500 && (
           <Button
             onClick={() => onOpen((o) => !o)}
             variant="link"
@@ -210,9 +243,10 @@ export const Header = () => {
               </span>
             )}
           </Button>
-        )}
-      </Flex>
-      <Flex
+        )} */}
+        </Flex>
+      )}
+      {/* <Flex
         zIndex={6}
         position="fixed"
         left="0"
@@ -235,10 +269,7 @@ export const Header = () => {
             : 'circle(100px at 90% -20%)'
         }}
       >
-        <ChakraLink
-          href="https://etherscan.io/address/0xecb9b2ea457740fbde58c758e4c574834224413e"
-          isExternal
-        >
+        <ChakraLink href="/world" isExternal>
           Monsters Contract
         </ChakraLink>
 
@@ -257,7 +288,7 @@ export const Header = () => {
         <ChakraLink href="https://opensea.io/collection/monstermaps" isExternal>
           Maps Opensea
         </ChakraLink>
-      </Flex>
+      </Flex> */}
     </Flex>
   );
 };
