@@ -80,6 +80,7 @@ export const Header = () => {
       justify="space-between"
       align="center"
       zIndex={5}
+      bg="black"
     >
       <Flex align="center" p="1rem" m="1rem" w="100%">
         <RouterLink to="/">
