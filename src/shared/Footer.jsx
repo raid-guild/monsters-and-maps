@@ -13,7 +13,7 @@ import builtByRaidGuild from '../assets/built_by_raidguild.svg';
 export const Footer = () => {
   return (
     <Flex
-      direction={{ base: 'column-reverse', md: 'row', lg: 'row' }}
+      direction={{ base: 'column', md: 'row', lg: 'row' }}
       alignItems="flex-start"
       justifyContent="space-between"
       px={{ base: '2rem', lg: '5rem' }}
@@ -89,9 +89,9 @@ export const Footer = () => {
       <Image
         src={builtByRaidGuild}
         alt="built by raidguild"
-        width={{ base: '150px', lg: '250px' }}
-        ml="auto"
-        mt="2rem"
+        width="250px"
+        ml={{ base: '0px', md: 'auto' }}
+        mt={{ base: '2rem' }}
       />
     </Flex>
   );

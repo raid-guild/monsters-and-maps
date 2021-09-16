@@ -55,12 +55,15 @@ const Monster = () => {
       h="100%"
       w="100%"
       px="2rem"
-      my="5rem"
+      my={{ md: '5rem', base: '2rem' }}
     >
       {loading && <Spinner size="xl" />}
       {data && (
-        <Grid templateColumns="repeat(2, 1fr)" gap={1}>
-          <Box>
+        <Grid
+          templateColumns={{ md: 'repeat(1, 1fr)', lg: 'repeat(2, 1fr)' }}
+          gap={1}
+        >
+          <Box mb={{ md: '2rem', base: '2rem' }}>
             <Heading variant="headingTwo" mb="1rem">
               Monster #${tokenId}
             </Heading>
@@ -78,7 +81,10 @@ const Monster = () => {
             <Heading variant="headingTwo" mb="1rem">
               Located Maps
             </Heading>
-            <Grid templateColumns="repeat(4, 1fr)" gap={6}>
+            <Grid
+              templateColumns={{ md: 'repeat(4, 1fr)', base: 'repeat(1, 1fr)' }}
+              gap={6}
+            >
               {maps.length === 0 && (
                 <Text variant="textOne">Maps not yet found!</Text>
               )}
