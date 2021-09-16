@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import { SimpleGrid, Box, Spinner } from '@chakra-ui/react';
+import { SimpleGrid, Box, Spinner, Tooltip } from '@chakra-ui/react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useHistory } from 'react-router-dom';
 
 const MapTiles = ({ grids, connect, mint }) => {
   const [count, setCount] = useState({
     prev: 0,
-    next: 100
+    next: 1000
   });
   const [hasMore, setHasMore] = useState(true);
   const [current, setCurrent] = useState(grids.slice(count.prev, count.next));
@@ -18,12 +18,12 @@ const MapTiles = ({ grids, connect, mint }) => {
       setHasMore(false);
       return;
     }
-    setTimeout(() => {
-      setCurrent(current.concat(grids.slice(count.prev + 10, count.next + 10)));
-    }, 2000);
+    setCurrent(
+      current.concat(grids.slice(count.prev + 1000, count.next + 1000))
+    );
     setCount((prevState) => ({
-      prev: prevState.prev + 100,
-      next: prevState.next + 100
+      prev: prevState.prev + 1000,
+      next: prevState.next + 1000
     }));
   };
 
@@ -44,23 +44,24 @@ const MapTiles = ({ grids, connect, mint }) => {
       loader={<Spinner size="sm" />}
     >
       <SimpleGrid
-        columns={15}
+        columns={100}
         gap={1}
         style={{ backdropFilter: 'blur(.5rem)' }}
       >
         {current.map((token) => (
-          <Box
-            key={token.id}
-            bg={token.claimed ? 'red' : 'blackLight'}
-            color="white"
-            p={3}
-            fontFamily="jetbrains"
-            cursor="pointer"
-            _hover={{ bg: 'black' }}
-            onClick={() => tileClickHandler(token.id, token.claimed)}
-          >
-            #{token.id}
-          </Box>
+          <Tooltip label={token.id} key={token.id}>
+            <Box
+              key={token.id}
+              bg={token.claimed ? 'red' : 'greyDark'}
+              h="8px"
+              w="8px"
+              color="white"
+              fontFamily="jetbrains"
+              cursor="pointer"
+              _hover={{ bg: 'black' }}
+              onClick={() => tileClickHandler(token.id, token.claimed)}
+            ></Box>
+          </Tooltip>
         ))}
       </SimpleGrid>
     </InfiniteScroll>
