@@ -6,8 +6,16 @@ import {
   Heading,
   Text,
   Button,
-  useToast,
-  Link
+  Link,
+  Tabs,
+  Tab,
+  TabList,
+  TabPanels,
+  TabPanel,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalCloseButton
 } from '@chakra-ui/react';
 import { useQuery } from '@apollo/client';
 import { useHistory } from 'react-router-dom';
@@ -40,93 +48,55 @@ let grids = [];
 
 const World = () => {
   const context = useContext(AppContext);
-  const { loading, error, data, fetchMore } = useQuery(GET_ALL_MAPS, {
+  const { error, data, fetchMore } = useQuery(GET_ALL_MAPS, {
     variables: {
       first: 1000,
       skip: 0
-    }
+    },
+    notifyOnNetworkStatusChange: true
   });
   const history = useHistory();
-  const toast = useToast();
 
   const [canvasDrawn, setCanvasDrawn] = useState(false);
   const [tokenIdInput, setTokenIdInput] = useState(10000);
-  const [txInitiated, setTxInitiated] = useState(false);
-  const [txHash, setTxHash] = useState('');
 
-  if (loading) console.log('Loading...');
+  const [loading, setLoading] = useState(false);
+  const [txInitiated, setTxInitiated] = useState(false);
+  const [txHash, setTxhash] = useState('');
+  const [modal, setModal] = useState(false);
+
   if (error) console.log(`Error! ${error.message}`);
 
-  const mint = async () => {
-    console.log(context.chainID);
-    if (context.ethersProvider === '') {
-      setTxInitiated(true);
-      await context.connectWallet();
-      setTxInitiated(false);
-    } else if (context.chainID === 1 || context.chainID === '0x1') {
-      try {
-        setTxInitiated(true);
-        let tx = await mintMap(parseInt(tokenIdInput), context.ethersProvider);
-        if (tx) {
-          toast({
-            duration: 6000,
-            position: 'top',
-            render: () => (
-              <Box
-                bg='black'
-                fontFamily='jetbrains'
-                color='red'
-                mt='1rem'
-                p='3'
-              >
-                View your transaction{' '}
-                <Link
-                  href={`https://etherscan.io/tx/${txHash}`}
-                  isExternal
-                  textDecoration='underline'
-                >
-                  here
-                </Link>
-              </Box>
-            )
-          });
-          setTxHash(tx.hash);
-          const { status } = await tx.wait();
-          if (status === 1) {
-            setTxInitiated(false);
-            history.push('/dashboard');
-          } else {
-            toast({
-              duration: 6000,
-              position: 'top',
-              render: () => (
-                <Box
-                  bg='black'
-                  fontFamily='jetbrains'
-                  color='red'
-                  mt='1rem'
-                  p='3'
-                >
-                  Transaction failed!
-                </Box>
-              )
-            });
-            setTxInitiated(false);
-          }
-        }
-      } catch (err) {
-        setTxInitiated(false);
+  const connect = async () => {
+    try {
+      setLoading(true);
+      if (context.ethersProvider === '') {
+        await context.connectWallet();
       }
-    } else {
-      toast({
-        duration: 6000,
-        position: 'top',
-        render: () => (
-          <Box bg='black' fontFamily='jetbrains' color='red' mt='1rem' p='3'>
-            Switch to Mainnet
-          </Box>
-        )
-      });
+      setModal(true);
+      setLoading(false);
+      setModal(true);
+    } catch (err) {
+      setLoading(false);
+    }
+  };
+
+  const mint = async () => {
+    try {
+      setTxInitiated(true);
+      let tx = await mintMap(parseInt(tokenIdInput), context.ethersProvider);
+      if (tx) {
+        setTxhash(tx.hash);
+        const { status } = await tx.wait();
+        if (status === 1) {
+          setTxInitiated(false);
+          history.push('/dashboard');
+        } else {
+          setTxInitiated(false);
+        }
+      }
+    } catch (err) {
+      setTxInitiated(false);
     }
   };
 
@@ -137,6 +107,7 @@ const World = () => {
   useEffect(() => {
     if (data) {
       let _temp = grids;
+
       data.maps.forEach((map) => {
         _temp.push(parseInt(map.tokenId));
       });
@@ -145,6 +116,13 @@ const World = () => {
         fetchMore({
           variables: {
             skip: data.maps.length
+          },
+          updateQuery: (prev, { fetchMoreResult }) => {
+            if (!fetchMoreResult) return prev;
+            console.log(fetchMoreResult);
+            return Object.assign({}, prev, {
+              maps: [...prev.maps, ...fetchMoreResult.maps]
+            });
           }
         });
       } else {
@@ -155,7 +133,6 @@ const World = () => {
         setCanvasDrawn(true);
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
   const drawGrid = (_grids) => {
@@ -214,35 +191,19 @@ const World = () => {
   };
 
   return (
-    <Flex direction='column' h='100%' w='100%' p='2rem'>
-      <Heading variant='headingOne'>The world map ..</Heading>
-      <Text variant='textOne' mt='1rem' mb='2rem'>
-        Below is a 100x100 grid with each of them representing a map where the
-        monsters hide and lurk in the dark. The red highlighted squares in the
-        grid represent a map token that has been explored by a hunter while the
-        dark squares are unexplored and who knows what hides in there.
-      </Text>
-      <canvas
-        id='grid'
-        style={{ background: theme.colors.blackLight }}
-      ></canvas>
-      <Heading variant='headingTwo' mt='5rem' mb='1rem'>
-        Explored Maps
+    <Flex direction="column" h="100%" w="100%" px="2rem" my="5rem">
+      <Heading variant="headingOne" mb="2rem">
+        Map Minter
       </Heading>
-      <Text variant='textOne' mt='1rem' mb='1rem'>
-        Find below the map token IDs that are explored in the above world map.
-        Click to re-explore a map. Or enter a token ID that is not explored to
-        mint it.
-      </Text>
-      <Flex direction='row' mb='2rem'>
+      <Flex direction="row" mb="2rem">
         <StyledInput
-          placeholder='Enter token ID'
+          placeholder="Enter token ID"
           onChange={(e) => setTokenIdInput(e.target.value)}
         ></StyledInput>
         <Button
-          isLoading={txInitiated}
-          variant='primary'
-          onClick={() => mint()}
+          isLoading={loading}
+          variant="primary"
+          onClick={() => connect()}
           disabled={
             tokenIdInput &&
             parseInt(tokenIdInput) <= 9750 &&
@@ -251,30 +212,123 @@ const World = () => {
               : true
           }
         >
-          {context.ethersProvider === '' ? 'Connect' : 'Claim'}
+          Claim
         </Button>
       </Flex>
-      {canvasDrawn && (
-        <SimpleGrid
-          columns={15}
-          gap={1}
-          style={{ backdropFilter: 'blur(.5rem)' }}
-        >
-          {grids.map((tokenId) => (
-            <Box
-              bg='blackLight'
-              color='red'
-              p={3}
-              fontFamily='jetbrains'
-              cursor='pointer'
-              _hover={{ bg: 'black' }}
-              onClick={() => history.push(`/map/${tokenId}`)}
-            >
-              #{tokenId}
-            </Box>
-          ))}
-        </SimpleGrid>
-      )}
+      <Tabs variant="line" isFitted>
+        <TabList fontFamily="rubik" fontWeight="bold">
+          <Tab bg="black" color="red" _selected={{ bg: 'red', color: 'black' }}>
+            World Map
+          </Tab>
+          <Tab bg="black" color="red" _selected={{ bg: 'red', color: 'black' }}>
+            Claimed Maps
+          </Tab>
+        </TabList>
+        <TabPanels>
+          <TabPanel>
+            <Text variant="textOne" mt="1rem" mb="2rem" maxW="100%">
+              Below is a 100x100 grid with each of them representing a map where
+              the monsters hide and lurk in the dark. The red highlighted
+              squares in the grid represent a map token that has been explored
+              by a hunter while the dark squares are unexplored and who knows
+              what hides in there.
+            </Text>
+            <canvas
+              id="grid"
+              style={{
+                background: theme.colors.blackLight,
+                width: '100%'
+              }}
+            ></canvas>
+          </TabPanel>
+          <TabPanel>
+            <Text variant="textOne" mt="1rem" mb="1rem" maxW="100%">
+              Find below the map token IDs that are explored in the above world
+              map. Click to re-explore a map. Or enter a token ID that is not
+              explored to mint it.
+            </Text>
+
+            {canvasDrawn && (
+              <SimpleGrid
+                columns={15}
+                gap={1}
+                style={{ backdropFilter: 'blur(.5rem)' }}
+              >
+                {grids.map((tokenId) => (
+                  <Box
+                    key={tokenId}
+                    bg="blackLight"
+                    color="red"
+                    p={3}
+                    fontFamily="jetbrains"
+                    cursor="pointer"
+                    _hover={{ bg: 'black' }}
+                    onClick={() => history.push(`/map/${tokenId}`)}
+                  >
+                    #{tokenId}
+                  </Box>
+                ))}
+              </SimpleGrid>
+            )}
+          </TabPanel>
+        </TabPanels>
+      </Tabs>
+
+      <Modal isOpen={modal} onClose={() => setModal(false)} isCentered>
+        <ModalOverlay>
+          <ModalContent
+            p="2rem"
+            maxW="40rem"
+            background="blackLight"
+            borderRadius="0.5rem"
+            color="white"
+            justifyContent="center"
+            alignItems="center"
+          >
+            <ModalCloseButton
+              _hover={{ bgColor: 'white20' }}
+              top="0.5rem"
+              right="0.5rem"
+            />
+            {context.chainID === 1 || context.chainID === '0x1' ? (
+              <>
+                <Text variant="textOne" mb="2rem" fontSize="lg">
+                  Are you sure to mint token #{tokenIdInput}?
+                </Text>
+
+                <Button
+                  onClick={() => mint()}
+                  isDisabled={txInitiated}
+                  isLoading={txInitiated}
+                  textTransform="uppercase"
+                  variant="primary"
+                  w="50px"
+                >
+                  Mint
+                </Button>
+              </>
+            ) : (
+              <Text variant="textOne" color="red">
+                Switch to Mainnet
+              </Text>
+            )}
+
+            {txHash && (
+              <Text color="white" textAlign="center" fontSize="sm">
+                Follow your transaction{' '}
+                <Link
+                  href={`https://etherscan.io/tx/${txHash}`}
+                  isExternal
+                  color="red"
+                  textDecoration="underline"
+                >
+                  here
+                </Link>
+              </Text>
+            )}
+          </ModalContent>
+        </ModalOverlay>
+      </Modal>
     </Flex>
   );
 };

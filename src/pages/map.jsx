@@ -12,8 +12,9 @@ import {
 import { useParams } from 'react-router-dom';
 
 import Mapper from '../components/Mapper';
-import { getTokenImage } from '../utils/helpers';
+import { getTokenImage, getAccountString } from '../utils/helpers';
 import { GET_MAP_INFO } from '../graphql/queries';
+import { getProfile } from '../utils/3box';
 
 import unclaimed_monster from '../assets/monster__unclaimed.png';
 
@@ -26,50 +27,63 @@ const Map = () => {
 
   const [monsters, setMonsters] = useState([]);
   const [mapTokenUri, setMapTokenUri] = useState('');
+  const [owner, setOwner] = useState('');
 
   if (loading) console.log('Loading...');
   if (error) console.log(`Error! ${error.message}`);
 
   useEffect(() => {
     if (data) {
-      console.log(data);
-      let dataUri = data.maps[0].tokenUri;
-      let json = atob(dataUri.substring(29));
-      let result = JSON.parse(json);
-      setMapTokenUri(result.image);
-      setMonsters(data.maps[0].monsters);
+      getProfile(data.maps[0].mintInfo.minter.address).then((p) => {
+        if (p && p.name) {
+          setOwner(p.name);
+        } else {
+          setOwner(getAccountString(data.maps[0].mintInfo.minter.address));
+        }
+
+        setMapTokenUri(getTokenImage(data.maps[0]));
+        setMonsters(data.maps[0].monsters);
+      });
     }
   }, [data]);
 
   return (
-    <Flex direction='column' alignItems='center' h='100%' w='100%' p='2rem'>
-      {loading && <Spinner size='xl' />}
+    <Flex
+      direction="column"
+      alignItems="center"
+      h="100%"
+      w="100%"
+      px="2rem"
+      my="5rem"
+    >
+      {loading && <Spinner size="xl" />}
       {data && (
-        <Grid templateColumns='repeat(2, 1fr)' gap={1}>
+        <Grid templateColumns="repeat(2, 1fr)" gap={1}>
           <Box>
-            <Heading variant='headingTwo' mb='1rem'>
+            <Heading variant="headingTwo" mb="1rem">
               Map #${tokenId}
             </Heading>
-            <Image src={mapTokenUri} alt='map' width='300px' />
+            <Image src={mapTokenUri} alt="map" width="300px" />
             <br />
-            <Text variant='textOne'>
-              minted at ${data.maps[0].mintInfo.time}
+            <Text variant="textOne">
+              minted at {data.maps[0].mintInfo.time}
             </Text>
-            <Text variant='textOne' maxW='300px' isTruncated>
-              minted by ${data.maps[0].mintInfo.minter.address}
+            <Text variant="textOne" maxW="300px" isTruncated>
+              minted by {owner}
             </Text>
           </Box>
 
           <Box>
-            <Heading variant='headingTwo' mb='1rem'>
+            <Heading variant="headingTwo" mb="1rem">
               Monsters Found
             </Heading>
-            <Grid templateColumns='repeat(4, 1fr)' gap={6}>
+            <Grid templateColumns="repeat(4, 1fr)" gap={6}>
               {monsters.map((monster, index) => {
                 let tokenImage = getTokenImage(monster);
 
                 return (
                   <Mapper
+                    key={index}
                     index={index}
                     tokenId={monster.tokenId}
                     image={tokenImage !== '' ? tokenImage : unclaimed_monster}

@@ -8,10 +8,9 @@ import { theme } from '../theme/index';
 
 import { AppContext } from '../context/AppContext';
 
-import FAQ from '../components/Faq';
-
 const StyledInput = styled.input`
-  width: 350px;
+  max-width: 350px;
+  width: 100%;
   height: 50px;
   outline: none;
   color: white;
@@ -19,12 +18,15 @@ const StyledInput = styled.input`
   font-size: 1rem;
   border-radius: 3px;
   background-color: ${theme.colors.blackLighter};
-  margin-right: 1rem;
   padding: 10px;
   &::placeholder {
     color: #ff3864;
     opacity: 1;
   }
+`;
+
+const StyledFlex = styled(Flex)`
+  gap: 1rem;
 `;
 
 const Main = () => {
@@ -46,47 +48,25 @@ const Main = () => {
   };
 
   return (
-    <Flex direction='column'>
-      <Heading variant='headingOne'>
+    <Flex direction="column" my="5rem">
+      <Heading variant="headingOne" p="1rem">
         I see your interest is piqued, curious traveller..
       </Heading>
-      <Text variant='textOne' mt='1rem'>
+      <Text variant="textOne" p="1rem">
         Ever since monsters and maps started appearing across the horizon, there
         have been murmurs in the crowd - what's the meaning behind all these?
         Well, We've overheard some rumours, stories and quests, in taverns and
         inns. Mint monsters and maps and dive right in.
       </Text>
-      <Flex direction='row' mt='2rem'>
+      <StyledFlex direction="row" p="1rem" flexWrap="wrap">
         <StyledInput
-          placeholder='Enter address (OR)'
+          placeholder="Enter address (OR)"
           onChange={(e) => setAddressInput(e.target.value)}
         ></StyledInput>
-        <Button
-          variant='primary'
-          mr='1rem'
-          onClick={() => connectAndRedirect(context)}
-        >
+        <Button variant="primary" onClick={() => connectAndRedirect(context)}>
           {web3.utils.isAddress(addressInput) ? 'Track' : 'Connect'}
         </Button>
-        <Button
-          variant='secondary'
-          mr='1rem'
-          onClick={() => context.updateFaqModalStatus(true)}
-          id='faq-button'
-        >
-          Read FAQ
-        </Button>
-        <Button
-          variant='secondary'
-          onClick={() => history.push('/world')}
-          id='world-map-button'
-        >
-          View World Map
-        </Button>
-      </Flex>
-      
-
-      <FAQ />
+      </StyledFlex>
     </Flex>
   );
 };

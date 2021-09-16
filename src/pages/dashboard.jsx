@@ -49,22 +49,23 @@ const DashBoard = () => {
   }, [context.account, history]);
 
   return (
-    <Flex direction='column' h='100%' w='100%' p='2rem'>
-      {loading && <Spinner size='xl' />}
+    <Flex direction="column" h="100%" w="100%" px="2rem" my="5rem">
+      {loading && <Spinner size="xl" />}
       {!loading && (
         <>
-          <Flex direction='column'>
-            <Heading variant='headingTwo' mb='1rem' textDecoration='underline'>
+          <Flex direction="column">
+            <Heading variant="headingTwo" mb="1rem" textDecoration="underline">
               My Maps
             </Heading>
-            <Grid templateColumns='repeat(4, 1fr)' gap={6}>
+            <Grid templateColumns="repeat(4, 1fr)" gap={6}>
               {maps.length === 0 && (
-                <Text variant='textOne'>Maps not yet found!</Text>
+                <Text variant="textOne">Maps not yet found!</Text>
               )}
               {maps &&
                 maps.map((map, index) => {
                   return (
                     <Mapper
+                      key={index}
                       index={index}
                       tokenId={map.tokenId}
                       image={getTokenImage(map)}
@@ -74,18 +75,19 @@ const DashBoard = () => {
                 })}
             </Grid>
           </Flex>
-          <Flex direction='column' mt='3rem'>
-            <Heading variant='headingTwo' mb='1rem' textDecoration='underline'>
+          <Flex direction="column" mt="3rem">
+            <Heading variant="headingTwo" mb="1rem" textDecoration="underline">
               My Monsters
             </Heading>
-            <Grid templateColumns='repeat(4, 1fr)' gap={6}>
+            <Grid templateColumns="repeat(4, 1fr)" gap={6}>
               {monsters.length === 0 && (
-                <Text variant='textOne'>Monsters not yet found!</Text>
+                <Text variant="textOne">Monsters not yet found!</Text>
               )}
               {maps &&
                 monsters.map((monster, index) => {
                   return (
                     <Mapper
+                      key={index}
                       index={index}
                       tokenId={monster.tokenId}
                       image={getTokenImage(monster)}
